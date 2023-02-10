@@ -1,5 +1,7 @@
 import json
 import time
+import datetime
+from ftplib import FTP
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,9 +11,43 @@ from bs4 import BeautifulSoup
 
 URL = "https://app.acessorias.com/respdptos.php?geraR&fieldFilters=Atv_S,Dpt_8,Dpt_2,Dpt_1,Dpt_20,Dpt_3&modo=VNT"
 USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.63 Safari/537.36"
-COOKIE_FILE = "cookie.txt"
-OUTFILE = 'data.json'  # arquivo de saida de dados
-INFILE = 'ResponsaveisDptos.xls'  # arquivo de entrada de dados
+COOKIE_FILE = "./config/cookie.txt"
+OUTFILE = './config/data.json'
+LOGFILE = './config/log.csv'
+EMAIL = "atendimento@patrimoniumcontabilidade.com.br"
+FTP_PATH = 'ftp.patrimoniumcontabilidade.com.br'
+
+
+
+def rename_ftp_file(ftp, filename):
+    try:
+        file_exists = False
+        for f in ftp.nlst():
+            if f == filename:
+                file_exists = True
+                break
+        
+        if file_exists:
+            ftp.rename(filename, filename + '.bak')
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
+def send_ftp():
+    try:
+        ftp = FTP(FTP_PATH)
+        ftp.login(user=EMAIL, passwd='a;sExb~m*Dl%)R~%%l')
+        rename_ftp_file(ftp, 'data.json')
+        with open(OUTFILE, 'rb') as f:
+            ftp.storbinary('STOR data.json', f)
+
+        ftp.quit()
+        return True
+    except:
+        return False
 
 
 def get_cookie():
@@ -20,30 +56,33 @@ def get_cookie():
         options.add_argument("--headless")
 
         browser = webdriver.Chrome(chrome_options=options)
-        browser.get("https://app.acessorias.com/index.php")
-        time.sleep(3)
-        username = browser.find_element(by=By.NAME, value="mailAC")
-        password = browser.find_element(by=By.NAME, value="passAC")
+        if browser:
+            browser.get("https://app.acessorias.com/index.php")
+            time.sleep(3)
+            username = browser.find_element(by=By.NAME, value="mailAC")
+            password = browser.find_element(by=By.NAME, value="passAC")
 
-        username.send_keys("atendimento@patrimoniumcontabilidade.com.br")
-        password.send_keys("#Patri2020")
+            if username and password:
 
-        time.sleep(2)
-        browser.find_element(by=By.CLASS_NAME, value="btn-enviar").click()
-        time.sleep(5)
+                username.send_keys(EMAIL)
+                password.send_keys("#Patri2020")
 
-        cookies = browser.get_cookies()
-        final_cookie = ''
+                time.sleep(2)
+                browser.find_element(by=By.CLASS_NAME, value="btn-enviar").click()
+                time.sleep(5)
 
-        for cookie in cookies:
-            final_cookie += '{}={};'.format(cookie['name'], cookie['value'])
+                cookies = browser.get_cookies()
+                final_cookie = ''
 
-        browser.close()
-        return final_cookie
+                for cookie in cookies:
+                    final_cookie += '{}={};'.format(cookie['name'], cookie['value'])
 
+                browser.close()
+                return final_cookie
+        
+        return False
 
     except Exception as e:
-        print(e)
         return False
 
 
@@ -146,77 +185,70 @@ def work_html(html):
 
 if __name__ == '__main__':
     try:
-        ops_sim = ['sim', 'SIM', 'Sim', 's', 'S', 'Yes',
-                   'yes', 'y', 'Y', 'SIm', 'siM', 'sIM', 'sIm']
-        print('[    WEB CRAWLER - ACESSORIAS    ]\n\n')
+        log = dict()
+        qtd_try = 0
+        data = False
+        
+        log['now'] = datetime.datetime.now()
 
-        while True:
+        # Lê arquivo de cookies
+        cookie = read_file(COOKIE_FILE)
 
-            data = False
-            op = ''
+        # Caso o arquivo não exista, cria ele com vazio
+        if not cookie:
+            write_file(' ', COOKIE_FILE)
+            cookie = ' '
 
-            print(
-                '[      Iniciando a captura de dados...     ]\n\nDeseja usar um arquivo local? [ Padrão: NÃO ]')
-            op = input('SIM (S) ou NÃO (N): ')
-
-            if op in ops_sim:
-
-                while not data:
-
-                    file_name = input(
-                        'Relatorio de Responsáveis [ Padrão: {} ]\nInsira o nome do arquivo: '.format(INFILE)) or INFILE
-                    data = read_file(file_name)
-
+        log['session'] = 'A sessão ainda é válida'
+        # Verifica se a requisição foi bem sucedida, caso contrario renova os cookies e tenta 3 vezes
+        for i in range(4):
+            response = get_html(URL, cookie)
+            if not response:
+                log['session'] = 'A sessão expirou'
+                cookie = get_cookie()
+                write_file(cookie, COOKIE_FILE)
             else:
-
-                cookie = read_file(COOKIE_FILE)
-
-                if not cookie:
-                    write_file(' ', COOKIE_FILE)
-                    cookie = ' '
-
-                while not data:
-
-                    print('[    Realizando a requisição...     ]')
-                    response = get_html(URL, cookie)
-
-                    if not response:
-                        print(
-                            '[    Sessão expirada!    ]\n\n[      Renovando os Cookies - Aguarde...      ]\n')
-                        cookie = get_cookie()
-                        write_file(cookie, COOKIE_FILE)
-                        continue
-
-                    data = response.text
-
-            if data:
-                print('[    Extraindo dados...  ]')
-                lista_empresas = work_html(data)
-                if lista_empresas:
-                    print('[    Gerando arquivo de dados...    ]')
-                    json_empresas = json.dumps(lista_empresas)
-                    resp = write_file(json_empresas, OUTFILE)
-                    if resp:
-                        print('[    Arquivo {} gerado com sucesso!  ]\n[    EMPRESAS LISTADAS: {}   ]'.format(
-                            OUTFILE, len(lista_empresas)))
-                    else:
-                        print('Falha ao tentar gerar o arquivo de dados!')
-                else:
-                    print('Falha ao tentar extrair os dados!')
-            else:
-                print('Falha ao tentar realizar a requisição!')
-
-            print('Deseja reiniciar o programa? [ Padrão: NÃO ]')
-            fim = input('SIM (S) ou NÃO (N): ')
-            if fim in ops_sim:
-                continue
-            else:
+                data = response.text
                 break
 
-    except KeyboardInterrupt:
-        print('\n\nPrograma finalizado!')
+        # Continua caso a requisição tenha sido bem sucedida
+        if data:
+            lista_empresas = work_html(data)
+            if lista_empresas:
+                json_empresas = json.dumps(lista_empresas)
+                resp = write_file(json_empresas, OUTFILE)
+                if resp:
+                    if send_ftp():
+                        log['message'] = 'Arquivo: {} gerado e enviado com sucesso! - EMPRESAS LISTADAS: {}'.format(OUTFILE, len(lista_empresas))
+                        log['status'] = '1'
+                    else:
+                        log['message'] = 'O arquivo: {} foi gerado, mas não foi enviado! - EMPRESAS LISTADAS: {}'.format(OUTFILE, len(lista_empresas))
+                        log['status'] = '0'
 
+                else:
+                    log['message'] = 'Falha ao tentar gerar o arquivo de dados!'
+                    log['status'] = '0'
+            else:
+                log['message'] = 'Falha ao tentar extrair os dados!'
+                log['status'] = '0'
+        else:
+            log['message'] = "Falha na requisição!"
+            log['status'] = '0'
+
+        #   Grava os logs em um arquivo
+        header_log = 'Status; Data/Hora; Sessão; Mensagem;\n'
+
+        log_text = '{}; {}; {}; {};.\n'.format(log['status'], log['now'], log['session'], log['message'])
+
+        log_file = read_file(LOGFILE)
+ 
+        if log_file:
+            log_text = log_file + log_text
+        else:
+            log_text = header_log + log_text
+        
+        write_file(log_text, LOGFILE)
+        
+        
     except Exception as e:
         print('Ocorreu um erro:\n{}'.format(e))
-
-    print('[    FIM! :)    ]')
