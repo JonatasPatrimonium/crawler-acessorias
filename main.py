@@ -199,12 +199,12 @@ if __name__ == '__main__':
             write_file(' ', COOKIE_FILE)
             cookie = ' '
 
-        log['session'] = 'A sessão ainda é válida'
+        log['session'] = 'A sessao ainda e valida'
         # Verifica se a requisição foi bem sucedida, caso contrario renova os cookies e tenta 3 vezes
         for i in range(4):
             response = get_html(URL, cookie)
             if not response:
-                log['session'] = 'A sessão expirou'
+                log['session'] = 'A sessao expirou'
                 cookie = get_cookie()
                 write_file(cookie, COOKIE_FILE)
             else:

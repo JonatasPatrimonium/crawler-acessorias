@@ -54,7 +54,7 @@
  [],
  False,
  False,
- 1676051037,
+ 1676053624,
  [('run.exe',
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
