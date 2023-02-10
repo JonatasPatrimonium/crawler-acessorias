@@ -25,8 +25,8 @@ def get_cookie():
         username = browser.find_element(by=By.NAME, value="mailAC")
         password = browser.find_element(by=By.NAME, value="passAC")
 
-        username.send_keys("jonataslima@patrimoniumcontabilidade.com.br")
-        password.send_keys("@UbEn32nyD")
+        username.send_keys("atendimento@patrimoniumcontabilidade.com.br")
+        password.send_keys("#Patri2020")
 
         time.sleep(2)
         browser.find_element(by=By.CLASS_NAME, value="btn-enviar").click()
