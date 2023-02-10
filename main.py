@@ -15,28 +15,36 @@ INFILE = 'ResponsaveisDptos.xls'  # arquivo de entrada de dados
 
 
 def get_cookie():
-    browser = webdriver.Firefox()
-    browser.get("https://app.acessorias.com/index.php")
-    time.sleep(3)
-    username = browser.find_element(by=By.NAME, value="mailAC")
-    password = browser.find_element(by=By.NAME, value="passAC")
+    try:
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
 
-    username.send_keys("jonataslima@patrimoniumcontabilidade.com.br")
-    password.send_keys("@UbEn32nyD")
+        browser = webdriver.Chrome(chrome_options=options)
+        browser.get("https://app.acessorias.com/index.php")
+        time.sleep(3)
+        username = browser.find_element(by=By.NAME, value="mailAC")
+        password = browser.find_element(by=By.NAME, value="passAC")
 
-    time.sleep(2)
-    login_attempt = browser.find_element(
-        by=By.CLASS_NAME, value="btn-enviar").click()
-    time.sleep(5)
+        username.send_keys("jonataslima@patrimoniumcontabilidade.com.br")
+        password.send_keys("@UbEn32nyD")
 
-    cookies = browser.get_cookies()
-    final_cookie = ''
+        time.sleep(2)
+        browser.find_element(by=By.CLASS_NAME, value="btn-enviar").click()
+        time.sleep(5)
 
-    for cookie in cookies:
-        final_cookie += '{}={};'.format(cookie['name'], cookie['value'])
+        cookies = browser.get_cookies()
+        final_cookie = ''
 
-    browser.close()
-    return final_cookie
+        for cookie in cookies:
+            final_cookie += '{}={};'.format(cookie['name'], cookie['value'])
+
+        browser.close()
+        return final_cookie
+
+
+    except Exception as e:
+        print(e)
+        return False
 
 
 def write_file(data, file):
