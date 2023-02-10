@@ -1,6 +1,7 @@
 import json
 import time
 import datetime
+import sys
 from ftplib import FTP
 
 from selenium import webdriver
@@ -8,6 +9,10 @@ from selenium.webdriver.common.by import By
 
 import requests
 from bs4 import BeautifulSoup
+        
+sys.dont_write_bytecode = True
+sys.dont_write_bytecode = True
+sys.dont_write_bytecode = True
 
 URL = "https://app.acessorias.com/respdptos.php?geraR&fieldFilters=Atv_S,Dpt_8,Dpt_2,Dpt_1,Dpt_20,Dpt_3&modo=VNT"
 USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.63 Safari/537.36"
@@ -189,7 +194,7 @@ if __name__ == '__main__':
         qtd_try = 0
         data = False
         
-        log['now'] = datetime.datetime.now()
+        log['now'] = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
         # Lê arquivo de cookies
         cookie = read_file(COOKIE_FILE)
@@ -219,10 +224,10 @@ if __name__ == '__main__':
                 resp = write_file(json_empresas, OUTFILE)
                 if resp:
                     if send_ftp():
-                        log['message'] = 'Arquivo: {} gerado e enviado com sucesso! - EMPRESAS LISTADAS: {}'.format(OUTFILE, len(lista_empresas))
+                        log['message'] = 'O arquivo foi gerado e enviado com sucesso! - EMPRESAS LISTADAS: {}'.format(len(lista_empresas))
                         log['status'] = '1'
                     else:
-                        log['message'] = 'O arquivo: {} foi gerado, mas não foi enviado! - EMPRESAS LISTADAS: {}'.format(OUTFILE, len(lista_empresas))
+                        log['message'] = 'O arquivo foi gerado, mas não foi enviado! - EMPRESAS LISTADAS: {}'.format(len(lista_empresas))
                         log['status'] = '0'
 
                 else:
@@ -236,9 +241,9 @@ if __name__ == '__main__':
             log['status'] = '0'
 
         #   Grava os logs em um arquivo
-        header_log = 'Status; Data/Hora; Sessão; Mensagem;\n'
+        header_log = 'Status; Data/Hora; Sessao; Mensagem;\n'
 
-        log_text = '{}; {}; {}; {};.\n'.format(log['status'], log['now'], log['session'], log['message'])
+        log_text = '{}; {}; {}; {};\n'.format(log['status'], log['now'], log['session'], log['message'])
 
         log_file = read_file(LOGFILE)
  
