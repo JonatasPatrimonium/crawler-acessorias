@@ -2,6 +2,7 @@ import json
 import time
 import datetime
 import sys
+import os
 from ftplib import FTP
 
 from selenium import webdriver
@@ -16,9 +17,10 @@ sys.dont_write_bytecode = True
 
 URL = "https://app.acessorias.com/respdptos.php?geraR&fieldFilters=Atv_S,Dpt_8,Dpt_2,Dpt_1,Dpt_20,Dpt_3&modo=VNT"
 USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.63 Safari/537.36"
-COOKIE_FILE = "./config/cookie.txt"
-OUTFILE = './config/data.json'
-LOGFILE = './config/log.csv'
+PATH = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Crawler')
+COOKIE_FILE = "cookie.txt"
+OUTFILE = 'data.json'
+LOGFILE = 'log.csv'
 EMAIL = "atendimento@patrimoniumcontabilidade.com.br"
 FTP_PATH = 'ftp.patrimoniumcontabilidade.com.br'
 
@@ -41,13 +43,13 @@ def rename_ftp_file(ftp, filename):
         return False
 
 
-def send_ftp():
+def send_ftp(filename, filepath):
     try:
         ftp = FTP(FTP_PATH)
         ftp.login(user=EMAIL, passwd='a;sExb~m*Dl%)R~%%l')
-        rename_ftp_file(ftp, 'data.json')
-        with open(OUTFILE, 'rb') as f:
-            ftp.storbinary('STOR data.json', f)
+        rename_ftp_file(ftp, filename)
+        with open(filepath, 'rb') as f:
+            ftp.storbinary('STOR {}'.format(filename), f)
 
         ftp.quit()
         return True
@@ -194,14 +196,15 @@ if __name__ == '__main__':
         qtd_try = 0
         data = False
         
-        log['now'] = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        log['date'] = datetime.datetime.now().strftime('%d/%m/%Y')
+        log['time'] = datetime.datetime.now().strftime('%H:%M:%S')
 
         # Lê arquivo de cookies
-        cookie = read_file(COOKIE_FILE)
+        cookie = read_file(os.path.join(PATH, COOKIE_FILE))
 
         # Caso o arquivo não exista, cria ele com vazio
         if not cookie:
-            write_file(' ', COOKIE_FILE)
+            write_file(' ', os.path.join(PATH, COOKIE_FILE))
             cookie = ' '
 
         log['session'] = 'A sessao ainda e valida'
@@ -211,25 +214,27 @@ if __name__ == '__main__':
             if not response:
                 log['session'] = 'A sessao expirou'
                 cookie = get_cookie()
-                write_file(cookie, COOKIE_FILE)
+                write_file(cookie, os.path.join(PATH, COOKIE_FILE))
             else:
                 data = response.text
                 break
 
+        log['companies'] = ''
         # Continua caso a requisição tenha sido bem sucedida
         if data:
             lista_empresas = work_html(data)
             if lista_empresas:
                 json_empresas = json.dumps(lista_empresas)
-                resp = write_file(json_empresas, OUTFILE)
+                resp = write_file(json_empresas, os.path.join(PATH, OUTFILE))
                 if resp:
-                    if send_ftp():
-                        log['message'] = 'O arquivo foi gerado e enviado com sucesso! - EMPRESAS LISTADAS: {}'.format(len(lista_empresas))
+                    if send_ftp(OUTFILE, os.path.join(PATH, OUTFILE)):
+                        log['message'] = 'O arquivo foi gerado e enviado com sucesso!'
                         log['status'] = '1'
                     else:
-                        log['message'] = 'O arquivo foi gerado, mas não foi enviado! - EMPRESAS LISTADAS: {}'.format(len(lista_empresas))
+                        log['message'] = 'O arquivo foi gerado, mas não foi enviado!'
                         log['status'] = '0'
 
+                    log['companies'] = '{}'.format(len(lista_empresas))
                 else:
                     log['message'] = 'Falha ao tentar gerar o arquivo de dados!'
                     log['status'] = '0'
@@ -241,18 +246,19 @@ if __name__ == '__main__':
             log['status'] = '0'
 
         #   Grava os logs em um arquivo
-        header_log = 'Status; Data/Hora; Sessao; Mensagem;\n'
+        header_log = 'Status; Data; Hora; Sessao; Mensagem; Empresas;\n'
 
-        log_text = '{}; {}; {}; {};\n'.format(log['status'], log['now'], log['session'], log['message'])
+        log_text = '{}; {}; {}; {}; {}; {};\n'.format(log['status'], log['date'], log['time'], log['session'], log['message'], log['companies'])
 
-        log_file = read_file(LOGFILE)
+        log_file = read_file(os.path.join(PATH, LOGFILE))
  
         if log_file:
             log_text = log_file + log_text
         else:
             log_text = header_log + log_text
         
-        write_file(log_text, LOGFILE)
+        write_file(log_text, os.path.join(PATH, LOGFILE))
+        send_ftp(LOGFILE, os.path.join(PATH, LOGFILE))
         
         
     except Exception as e:

@@ -293,18 +293,6 @@
   ('importlib',
    'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\importlib\\__init__.py',
    'PYMODULE'),
-  ('tracemalloc',
-   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\tracemalloc.py',
-   'PYMODULE'),
-  ('subprocess',
-   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\subprocess.py',
-   'PYMODULE'),
-  ('signal',
-   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\signal.py',
-   'PYMODULE'),
-  ('stringprep',
-   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\stringprep.py',
-   'PYMODULE'),
   ('getpass',
    'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\getpass.py',
    'PYMODULE'),
@@ -325,6 +313,12 @@
    'PYMODULE'),
   ('http.client',
    'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\http\\client.py',
+   'PYMODULE'),
+  ('stringprep',
+   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\stringprep.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\tracemalloc.py',
    'PYMODULE'),
   ('_py_abc',
    'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\_py_abc.py',
@@ -749,6 +743,12 @@
   ('platform',
    'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\platform.py',
    'PYMODULE'),
+  ('subprocess',
+   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\subprocess.py',
+   'PYMODULE'),
+  ('signal',
+   'C:\\Users\\jonatas.lima\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\signal.py',
+   'PYMODULE'),
   ('selenium.webdriver.wpewebkit.options',
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\wpewebkit\\options.py',
@@ -1158,53 +1158,53 @@
  [('base_library.zip',
    'C:\\Projetos Python\\WebCrawlerAcessorias\\build\\main\\base_library.zip',
    'DATA'),
-  ('selenium\\webdriver\\common\\devtools\\v107\\py.typed',
+  ('selenium\\webdriver\\firefox\\webdriver_prefs.json',
    'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v107\\py.typed',
-   'DATA'),
-  ('selenium\\webdriver\\common\\devtools\\v85\\py.typed',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v85\\py.typed',
-   'DATA'),
-  ('selenium\\webdriver\\common\\devtools\\v109\\py.typed',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v109\\py.typed',
-   'DATA'),
-  ('selenium\\webdriver\\remote\\getAttribute.js',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\remote\\getAttribute.js',
-   'DATA'),
-  ('certifi\\py.typed',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\certifi\\py.typed',
-   'DATA'),
-  ('selenium\\webdriver\\common\\mutation-listener.js',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\mutation-listener.js',
-   'DATA'),
-  ('selenium\\webdriver\\common\\devtools\\v108\\py.typed',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v108\\py.typed',
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\firefox\\webdriver_prefs.json',
    'DATA'),
   ('selenium\\webdriver\\remote\\isDisplayed.js',
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\remote\\isDisplayed.js',
    'DATA'),
-  ('selenium\\webdriver\\firefox\\webdriver_prefs.json',
+  ('selenium\\webdriver\\common\\devtools\\v107\\py.typed',
    'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\firefox\\webdriver_prefs.json',
-   'DATA'),
-  ('selenium\\webdriver\\common\\linux\\selenium-manager',
-   'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\linux\\selenium-manager',
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v107\\py.typed',
    'DATA'),
   ('selenium\\py.typed',
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\py.typed',
    'DATA'),
+  ('selenium\\webdriver\\common\\linux\\selenium-manager',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\linux\\selenium-manager',
+   'DATA'),
+  ('selenium\\webdriver\\common\\devtools\\v109\\py.typed',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v109\\py.typed',
+   'DATA'),
   ('selenium\\webdriver\\common\\macos\\selenium-manager',
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\macos\\selenium-manager',
+   'DATA'),
+  ('selenium\\webdriver\\common\\windows\\selenium-manager.exe',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\windows\\selenium-manager.exe',
+   'DATA'),
+  ('certifi\\py.typed',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\certifi\\py.typed',
+   'DATA'),
+  ('selenium\\webdriver\\remote\\getAttribute.js',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\remote\\getAttribute.js',
+   'DATA'),
+  ('selenium\\webdriver\\common\\devtools\\v108\\py.typed',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v108\\py.typed',
+   'DATA'),
+  ('selenium\\webdriver\\common\\mutation-listener.js',
+   'C:\\Projetos '
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\mutation-listener.js',
    'DATA'),
   ('certifi\\cacert.pem',
    'C:\\Projetos '
@@ -1214,8 +1214,8 @@
    'C:\\Projetos '
    'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\remote\\findElements.js',
    'DATA'),
-  ('selenium\\webdriver\\common\\windows\\selenium-manager.exe',
+  ('selenium\\webdriver\\common\\devtools\\v85\\py.typed',
    'C:\\Projetos '
-   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\windows\\selenium-manager.exe',
+   'Python\\WebCrawlerAcessorias\\venv\\Lib\\site-packages\\selenium\\webdriver\\common\\devtools\\v85\\py.typed',
    'DATA')],
  [])
