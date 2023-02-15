@@ -1,19 +1,21 @@
+import os
+import sys
 import json
 import time
 import datetime
-import sys
-import os
 from ftplib import FTP
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 
 import requests
 from bs4 import BeautifulSoup
-        
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
 sys.dont_write_bytecode = True
 sys.dont_write_bytecode = True
 sys.dont_write_bytecode = True
+
 
 URL = "https://app.acessorias.com/respdptos.php?geraR&fieldFilters=Atv_S,Dpt_8,Dpt_2,Dpt_1,Dpt_20,Dpt_3&modo=VNT"
 USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.63 Safari/537.36"
