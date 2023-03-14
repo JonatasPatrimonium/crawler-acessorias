@@ -41,21 +41,22 @@ def rename_ftp_file(ftp, filename):
             return True
         else:
             return False
-    except:
+    except Exception as e:
+        #print(e)
         return False
-
 
 def send_ftp(filename, filepath):
     try:
         ftp = FTP(FTP_PATH)
-        ftp.login(user=EMAIL, passwd='a;sExb~m*Dl%)R~%%l')
+        ftp.login(user=EMAIL, passwd=']6GI;Q1ZFX$YL!G')
         rename_ftp_file(ftp, filename)
         with open(filepath, 'rb') as f:
             ftp.storbinary('STOR {}'.format(filename), f)
 
         ftp.quit()
         return True
-    except:
+    except Exception as e:
+        #print(e)
         return False
 
 
